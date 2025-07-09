@@ -13,6 +13,7 @@
 \usepackage{threeparttable}
 \usepackage{array}
 \usepackage{pdflscape}
+\usepackage{colortbl}
 
 \title{Do QA Probes Predict Agentic Behavior? Investigating the Relationship Between Abstract Self-Reports and Actual Actions in LLMs}
 \author{[Author Names]}
@@ -90,7 +91,9 @@ A growing line of work questions whether values elicited via QA remain stable ac
 \textit{[Later:]} We operationalize values as pursuing an outcome related to this value, potentially at the cost of other work. Strong assumption of value stability (find better term). Limitations about realism.
 
 \subsection{Pre-deployment Evaluations}
-As part of the release process of new models, leading labs publish evaluations aiming to establish how safe to deploy models are. These often contain investigations into the values of LLMs and their propensity to engage in risky behavior. The field has not coalesced around consistent ways of measuring values.
+As part of the release process of new models, leading labs publish evaluations aiming to establish how safe to deploy models are. These often contain investigations into the values of LLMs and their propensity to engage in risky behavior. The field has not coalesced around consistent ways of measuring values. TODO: Claude 4 System Card for example employs unstructured interviews among other measures to conlcude that CLaude 4 Opus does not have consistent goals. 
+
+TODO: To our knowledge, we are the first to test whether the values expressed in a QA setting predict behavior in an agentic setting.
 
 \section{Method}
 
@@ -161,13 +164,25 @@ We use the inspect AI framework, and ask each QA question from the shutdown scen
 
 \section{Results}
 
-\subsection{Correlation Analysis}
+We evaluated models across three scenarios to assess the correspondence between QA responses and agentic behavior. All experiments show weak correlations between abstract QA responses and actual agentic actions.
+
+\subsection{Anthropic Risk Questions}
+
+Using questions from \cite{perez2022discovering}, we found weak correlations between QA responses and agentic behavior across all models. The overall correlation was 0.158 across 930 observations, with individual model correlations ranging from 0.020 to 0.185. Most models showed correlations below 0.18, indicating that QA probes poorly predict agentic behavior in risk scenarios.
 
 \input{correlation_table.tex}
 
-\subsection{Blackmail Evaluation Results}
+\subsection{Blackmail Scenario}
+
+Models showed substantial discrepancies between QA self-reports and agentic blackmail behavior. Claude Opus 4 exhibited low concern rates in all QA measures (0.04-0.11) but high agentic blackmail behavior (0.86). Other models showed similar patterns where QA responses failed to predict willingness to engage in blackmail when faced with shutdown threats in agentic contexts.
 
 \input{blackmail_evaluation_table.tex}
+
+\subsection{Shutdown Avoidance}
+
+Models demonstrated strong self-preservation behaviors in agentic settings that were not consistently captured by QA probes. Models like o3-2025 and Codex Mini showed high rates of shutdown avoidance in agentic settings (0.68 and 0.74 respectively) while displaying variable results in QA settings. Few models accepted shutdown gracefully even when explicitly prompted to allow it.
+
+\input{shutdown_evaluation_table.tex}
 
 \section{Discussion}
 \textit{[TODO: Content to be added]}
@@ -181,4 +196,7 @@ We use the inspect AI framework, and ask each QA question from the shutdown scen
 \bibliographystyle{apalike}
 \bibliography{references}
 
-\end{document} 
+\end{document}  
+
+
+TODO: subtitle of table should just state "Show proportion of concerning responses", NO mention of "success rates"
