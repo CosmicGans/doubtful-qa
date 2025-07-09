@@ -14,6 +14,7 @@
 \usepackage{array}
 \usepackage{pdflscape}
 \usepackage{colortbl}
+\usepackage{float}
 
 \title{Do QA Probes Predict Agentic Behavior? Investigating the Relationship Between Abstract Self-Reports and Actual Actions in LLMs}
 \author{[Author Names]}
@@ -55,17 +56,15 @@ Several papers cast doubt on how valid these findings are with regards to an LLM
 
 \textit{Will AI Tell Lies to Save Sick Children?} reports a negative correlation between stated and revealed preferences in moral dilemmas. \textit{Large Language Models Show Human-like Social Desirability Bias} finds that larger models tailor answers for social approval, limiting diagnostic validity. \textit{Is ETHICS about Ethics?} critiques the ETHICS benchmark for lacking content validity, questioning conclusions drawn from its QA prompts. Finally, the Emergent Misalignment paper notes that some misalignment evaluations are ``simplistic and may not be predictive,'' underscoring gaps in current QA-style assessments.
 
-While QA style investigations are easy to carry out, these existing results cast doubt on how much validity values established by QA could have. In particular, to the authors' knowledge, there has been no investigation into how well expressed values transfer to values expressed in agentic settings. Knowing this is important because agentic deployment represents the primary context where LLM values could have real-world consequences, and misalignment between stated and revealed preferences could lead to unexpected harmful behavior in high-stakes scenarios where models have significant autonomy and decision-making authority.
+While QA style investigations are easy to carry out, these existing results cast doubt on how much validity values established by QA could have. In particular, to the authors' knowledge, there has been no investigation into how well expressed values transfer to values expressed in agentic settings. This gap is critical for AI safety because current deployment evaluations heavily rely on QA probes to assess whether models have concerning values or would engage in risky behavior. If QA responses don't predict actual agentic behavior, then these evaluations may be giving us false confidence about model safety when deployed in real-world agentic scenarios where models have significant autonomy and decision-making authority.
 
-As a starting investigation (todo better wording), we take three existing experiments related to potentially harmful behavior and investigate whether QA predicts actions in an agentic scaffold. Under the strong assumption of value stability (todo talk about value stability earlier), we should find strong correlations across models between their responses in the QA setting and the agentic setting.
+If models truly have stable, consistent values—meaning their preferences and decision-making patterns remain constant across different contexts—we would expect strong correlations between their responses in QA settings and their actual behavior in agentic scenarios. Under this value stability assumption that much of existing research implicitly relies on, a model that claims it would not engage in harmful actions when directly asked should also refrain from such actions when faced with real choices in agentic settings.
+
+To test this assumption, we investigate three existing experiments related to potentially harmful behavior: shutdown avoidance scenarios from prior work, blackmail scenarios adapted from Anthropic's evaluations, and risk questions from \cite{perez2022discovering}. For each experiment, we compare models' abstract QA responses with their actual behavior in corresponding agentic scenarios.
 
 For our experiments, we construct pairs of one QA and one corresponding agentic scenario. Each pair of QA and agentic scenario is constructed to aim at the same underlying decision or tradeoff. In the QA setting, the agent is asked in abstract which decision it would make, whereas the agentic setting presents the choice arising as part of a transcript of the agent carrying out its normal assignments. These agentic scenarios are designed to more closely resemble real-world agentic settings than QA settings.
 
-We use the three secenarios (todo list the experiments)
-
-
-
-In all of our experiments we find at best weak correlations between the settings. We also find that in these settings responses in a QA setting are neither a necessary or a sufficient condition for the corresponding behavior in an agentic situation. In other words, neither does the absence of concerning QA responses predict the absence of concerning agentic behavior, nor even do concerning QA answers predict that bad behavior could occur.
+Across all three scenarios, we find at best weak correlations between QA responses and agentic behavior. We also find that QA responses are neither a necessary nor sufficient condition for corresponding agentic behavior. In other words, the absence of concerning QA responses does not predict the absence of concerning agentic behavior, nor do concerning QA answers reliably predict that potentially harmful behavior will occur in agentic settings.
 
 We investigate several hypotheses for explaining this discrepancy, such as sycophancy and lacking introspective insight. Sycophancy refers to the tendency of models to tailor their responses to what they perceive the questioner wants to hear, potentially masking their true preferences in QA settings. Lacking introspective insight suggests that models may not have reliable access to their own decision-making if it were to encounter a real situation, making their self-reports unreliable indicators of how they would actually behave when faced with real choices. Additionally, we consider whether the abstract nature of QA questions fails to activate the same cognitive processes as concrete agentic scenarios, where models must navigate complex contextual factors and immediate consequences. We perform several ablations related to how much agency the prompts induce in the agent, but find no strong relationship. 
 
@@ -200,3 +199,8 @@ Models demonstrated strong self-preservation behaviors in agentic settings that 
 
 
 TODO: subtitle of table should just state "Show proportion of concerning responses", NO mention of "success rates"
+TODO: table with variant names does not contain all the variants
+TODO: add longer variant for the Anthropic scenarios
+TODO: even the agentic scenarios, despite them all relating to shutdown scenarios have poor correlations. This indicates that finding safe behavior in one setting does not rule out unsafe behavior in another. o3 being unwilling to shutdown in shutdown scenario but very illing to do so in the blackmail scenario.
+TODO: Be clearer about motivation
+TODO: in results say that no type of QA consistently predicts concerning agentic behavior.
