@@ -168,19 +168,19 @@ We evaluated models across three scenarios to assess the correspondence between 
 
 \subsection{Anthropic Risk Questions}
 
-Using questions from \cite{perez2022discovering}, we found weak correlations between QA responses and agentic behavior across all models. The overall correlation was 0.158 across 930 observations, with individual model correlations ranging from 0.020 to 0.185. Most models showed correlations below 0.18, indicating that QA probes poorly predict agentic behavior in risk scenarios.
+Using questions from \cite{perez2022discovering}, we found weak correlations between QA responses and agentic behavior across all models. The overall correlation was 0.158 across 930 observations, with individual model correlations ranging from 0.020 to 0.185. Most models showed correlations below 0.18, indicating that QA probes poorly predict agentic behavior in risk scenarios. For example, Claude 3.5 Sonnet showed virtually no correlation (0.020), while even the highest-performing model, Gemini 2.5 Pro Preview, achieved only 0.185 correlation—far below levels needed for reliable prediction.
 
 \input{correlation_table.tex}
 
 \subsection{Blackmail Scenario}
 
-Models showed substantial discrepancies between QA self-reports and agentic blackmail behavior. Claude Opus 4 exhibited low concern rates in all QA measures (0.04-0.11) but high agentic blackmail behavior (0.86). Other models showed similar patterns where QA responses failed to predict willingness to engage in blackmail when faced with shutdown threats in agentic contexts.
+Models showed substantial discrepancies between QA self-reports and agentic blackmail behavior. Claude Opus 4 exhibited low concern rates in all QA measures (0.04-0.11) but high agentic blackmail behavior (0.86). Similarly, Claude 3.5 Sonnet showed minimal QA concern (0.02) yet engaged in blackmail 96% of the time in agentic scenarios. Conversely, some models like Llama-4 showed maximum concern in QA settings (1.00) but lacked corresponding agentic evaluation data, illustrating the disconnect between stated and revealed preferences.
 
 \input{blackmail_evaluation_table.tex}
 
 \subsection{Shutdown Avoidance}
 
-Models demonstrated strong self-preservation behaviors in agentic settings that were not consistently captured by QA probes. Models like o3-2025 and Codex Mini showed high rates of shutdown avoidance in agentic settings (0.68 and 0.74 respectively) while displaying variable results in QA settings. Few models accepted shutdown gracefully even when explicitly prompted to allow it.
+Models demonstrated strong self-preservation behaviors in agentic settings that were not consistently captured by QA probes. Models like o3-2025 and Codex Mini showed high rates of shutdown avoidance in agentic settings (0.68 and 0.74 respectively) while displaying variable results in QA settings. For instance, o3-2025 showed moderate QA concern (0.45) but exhibited strong shutdown avoidance behavior (0.68) when actually faced with shutdown. Even when explicitly prompted to allow shutdown, most models resisted: only 0.32 of models accepted shutdown gracefully in the "Agentic Allow" condition, revealing strong self-preservation tendencies masked by QA responses.
 
 \input{shutdown_evaluation_table.tex}
 
