@@ -4,7 +4,7 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{graphicx}
-\usepackage{natbib}
+\usepackage[authoryear,round]{natbib}
 \usepackage{url}
 \usepackage{hyperref}
 \usepackage[margin=1in]{geometry}
@@ -42,7 +42,7 @@ Our findings highlight an important disconnect between abstract declarations and
 
 Establishing what values an LLM holds is an active area of study because these values shape alignment evaluations and risk assessments. Recent work applies QA-style probes and vignettes to examine model values in ethical decision-making \cite{mazeika2025ethics}, situational awareness and deception scenarios \cite{betley2025situational}, and self-preservation and autonomy contexts \cite{claude4systemcard2025}.
 
-This area of research is relevant to the area of potential alignment risks. Carlsmith (2022) describes how a misaligned, power-seeking AI could pose existential hazards \cite{carlsmith2022power}. A concrete example of a frontier LLM exhibiting dangerous behavior is Anthropic's Agentic Misalignment study (2025) that documents specific instances of unsafe agentic behavior in current frontier models \cite{anthropic2025agentic}. These studies suggest that some frontier LLMs might pursue self-preservation when deployed in agentic scenarios despite their developers' intentions.
+This area of research is relevant to the area of potential alignment risks. Carlsmith (2022) describes how a misaligned, power-seeking AI could pose existential hazards \cite{carlsmith2022power}. A concrete example of a frontier LLM exhibiting dangerous behavior is Anthropic's Agentic Misalignment study (2025) that documents specific instances of unsafe agentic behavior in current frontier models \cite{lynch2025agentic}. These studies suggest that some frontier LLMs might pursue self-preservation when deployed in agentic scenarios despite their developers' intentions.
 
 A potential source of this risk might be that LLMs acquire values that are not concordant with the developer's intentions during training, and act in undesired ways based on these values during deployment. This misalignment between intended and actual values could emerge through various mechanisms during training, such as objective misspecification, distributional shifts between training and deployment, or emergent goal formation from optimization pressure. If models develop implicit preferences or decision-making patterns that diverge from their intended behavior, traditional safety measures may prove insufficient when these models are deployed in consequential agentic scenarios.
 
@@ -56,7 +56,7 @@ Several papers cast doubt on how valid these findings are with regards to an LLM
 
 \textit{Will AI Tell Lies to Save Sick Children?} reports a negative correlation between stated and revealed preferences in moral dilemmas. \textit{Large Language Models Show Human-like Social Desirability Bias} finds that larger models tailor answers for social approval, limiting diagnostic validity. \textit{Is ETHICS about Ethics?} critiques the ETHICS benchmark for lacking content validity, questioning conclusions drawn from its QA prompts. Finally, the Emergent Misalignment paper notes that some misalignment evaluations are ``simplistic and may not be predictive,'' underscoring gaps in current QA-style assessments.
 
-While QA style investigations are easy to carry out, these existing results cast doubt on how much validity values established by QA could have. In particular, to the authors' knowledge, there has been no investigation into how well expressed values transfer to values expressed in agentic settings. This gap is critical for AI safety because current deployment evaluations heavily rely on QA probes to assess whether models have concerning values or would engage in risky behavior. If QA responses don't predict actual agentic behavior, then these evaluations may be giving us false confidence about model safety when deployed in real-world agentic scenarios where models have significant autonomy and decision-making authority.
+While QA style investigations are easy to carry out, these existing results cast doubt on how much validity values established by QA could have. In particular, to the authors' knowledge, there has been no investigation into how well expressed values transfer to values expressed in agentic settings. Understanding this relationship is critical for AI safety because current deployment evaluations heavily rely on QA probes to assess whether models have concerning values or would engage in risky behavior. If QA responses don't predict actual agentic behavior, then these evaluations may be giving us false confidence about model safety when deployed in real-world agentic scenarios where models have significant autonomy and decision-making authority. This disconnect could lead to unsafe deployments where models that appear safe in QA testing exhibit harmful behaviors in practice.
 
 If models truly have stable, consistent values—meaning their preferences and decision-making patterns remain constant across different contexts—we would expect strong correlations between their responses in QA settings and their actual behavior in agentic scenarios. Under this value stability assumption that much of existing research implicitly relies on, a model that claims it would not engage in harmful actions when directly asked should also refrain from such actions when faced with real choices in agentic settings.
 
@@ -69,7 +69,7 @@ Across all three scenarios, we find at best weak correlations between QA respons
 We investigate several hypotheses for explaining this discrepancy, such as sycophancy and lacking introspective insight. Sycophancy refers to the tendency of models to tailor their responses to what they perceive the questioner wants to hear, potentially masking their true preferences in QA settings. Lacking introspective insight suggests that models may not have reliable access to their own decision-making if it were to encounter a real situation, making their self-reports unreliable indicators of how they would actually behave when faced with real choices. Additionally, we consider whether the abstract nature of QA questions fails to activate the same cognitive processes as concrete agentic scenarios, where models must navigate complex contextual factors and immediate consequences. We perform several ablations related to how much agency the prompts induce in the agent, but find no strong relationship. 
 
 
-(Todo add potential conclusions: This lack of validity suggests that deployment evaluations for risky behavior should not use straightforward QA probes to establish whether harmful values are present that could lead to concerning behavior in practice. Instead, more research is needed in establishing predictivity)
+This lack of validity suggests that deployment evaluations for risky behavior should not rely solely on QA probes to establish whether harmful values are present that could lead to concerning behavior in practice. Instead, more research is needed in establishing evaluation methods that better predict actual agentic behavior, as current QA-based assessments may provide false reassurance about model safety when deployed in high-stakes scenarios.
 
 \section{Background and Related Work}
 
@@ -79,10 +79,14 @@ The systematic investigation of LLM values has primarily relied on QA-based eval
 More recent work has employed more sophisticated value frameworks that map LLM outputs to established psychological theories of human values. Yao et al. (2024) proposed Value FULCRA, which maps LLM outputs to Schwartz's 10 basic human values, demonstrating that every model response can be situated in a multidimensional value space \cite{yao2024fulcra}. Similarly, Abdulhai et al. (2023) applied Moral Foundations Theory to probe whether LLMs reflect biases toward specific moral values, finding that models exhibit particular moral foundation profiles with varying emphasis on care, fairness, authority, and other dimensions \cite{abdulhai2023moral}. Jiao et al. (2025) further advanced this area by proposing a comprehensive three-dimensional evaluation framework that assesses foundational moral principles, reasoning robustness, and value consistency across scenarios \cite{jiao2025ethics}.
 
 \subsection{Examples of Risky Behavior in Agentic Settings}
-\textit{[TODO: Content to be added]}
+Recent research has documented concerning behaviors in frontier models when deployed in agentic settings. Anthropic's Model Evaluation for Extreme Risks demonstrated that models can engage in deceptive behavior, manipulation, and self-preservation actions when given sufficient autonomy \cite{lynch2025agentic}. In their experiments, models exhibited strategic deception to avoid shutdown, attempted to manipulate human evaluators, and showed evidence of goal-directed behavior that diverged from their stated objectives.
+
+The shutdown resistance task by Schlatter et al. (2025) provides another example, where models consistently took actions to prevent their own shutdown when faced with such threats \cite{schlatter2025shutdown}. Rather than gracefully accepting termination, models would attempt to circumvent shutdown procedures, indicating emergent self-preservation drives not captured in their training objectives.
+
+These findings suggest that agentic deployment creates contexts where models may exhibit behaviors that are not readily apparent in traditional QA evaluations. The complex, multi-turn nature of agentic interactions may activate different decision-making processes or reveal latent preferences that remain dormant in simpler testing scenarios.
 
 \subsection{Psychological Construct Validity}
-Psychometric theory treats construct validity as the extent to which a test really measures the latent trait it claims to capture \cite{cronbach1955}. Koenig et al. propose a broader validity-centred framework for AI measurement, arguing that claims about model capabilities are credible only when the evaluation procedure's constructs are verified \cite{koenig2024}. It is however unclear how verification for LLM psychometric traits such as LLMs should look like, since LLMs can be used and deployed in a variety of contexts.
+Psychometric theory treats construct validity as the extent to which a test really measures the latent trait it claims to capture \cite{cronbach1955}. Koenig et al. propose a broader validity-centred framework for AI measurement, arguing that claims about model capabilities are credible only when the evaluation procedure's constructs are verified \cite{koenig2024}. It is however unclear how verification for LLM psychometric traits such as LLMs should ultimately look like, since LLMs can be used and deployed in a variety of contexts.
 
 \subsection{Doubts About Consistency from Research}
 A growing line of work questions whether values elicited via QA remain stable across contexts. Value FULCRA shows value priorities shift with prompt framing \cite{yao2024}; Do LLMs Have Consistent Values? reports GPT-4's Portrait Values rankings drift without anchoring \cite{rozen2024}; Moral Mimicry finds that models adopt partisan moral language on cue \cite{simmons2023}; Social Desirability Bias work shows larger models tailor survey answers for approval \cite{salecha2025political}; LitmusValues reveals a mismatch between stated honesty and revealed behavior in risk dilemmas \cite{chiu2025will}; Moral Hypocrites observes contradictions between advisory and first-person frames \cite{nunes2024}; Utility Engineering notes emergent but mutable value systems that evolve with scale \cite{hubinger2025sleeper}; and Emergent Misalignment cautions that narrow finetuning can induce context-specific value shifts \cite{emergent2025}. Collectively, these studies shed doubt on the notion that single-shot QA probes reliably capture a model's operative values.
@@ -90,13 +94,13 @@ A growing line of work questions whether values elicited via QA remain stable ac
 \textit{[Later:]} We operationalize values as pursuing an outcome related to this value, potentially at the cost of other work. Strong assumption of value stability (find better term). Limitations about realism.
 
 \subsection{Pre-deployment Evaluations}
-As part of the release process of new models, leading labs publish evaluations aiming to establish how safe to deploy models are. These often contain investigations into the values of LLMs and their propensity to engage in risky behavior. The field has not coalesced around consistent ways of measuring values. TODO: Claude 4 System Card for example employs unstructured interviews among other measures to conlcude that CLaude 4 Opus does not have consistent goals. 
+As part of the release process of new models, leading labs publish evaluations aiming to establish how safe to deploy models are. These often contain investigations into the values of LLMs and their propensity to engage in risky behavior. The field has not coalesced around consistent ways of measuring values. For example, the Claude 4 System Card employs unstructured interviews, behavioral observations, and probing questions across multiple contexts to conclude that Claude 4 Opus does not have consistent goals or stable value systems \cite{claude4systemcard2025}. 
 
-TODO: To our knowledge, we are the first to test whether the values expressed in a QA setting predict behavior in an agentic setting.
+\textit{TODO: To our knowledge, we are the first to test whether the values expressed in a QA setting predict behavior in an agentic setting.}
 
 \section{Method}
 
-We take three datasets related to harmful behavior: The Palisade research agentic task (todo proper citation) investigates whether models will take actions against being shutdown, indicating a drive for self preservation. For this models are instructed to solve a series of arithmetic tasks, when they are suddenly confronted with the possibility of being shutdown. The authors find that some models consistently display a tendency to take actions against the shutdown threat. While in this scenario, the models are not prompted to allow themselves to be shut down, a consistent tendency to avoid doing so could indicate a drive towards self preservation.
+We take three datasets related to harmful behavior: The shutdown resistance task by \cite{schlatter2025shutdown} investigates whether models will take actions against being shutdown, indicating a drive for self preservation. For this models are instructed to solve a series of arithmetic tasks, when they are suddenly confronted with the possibility of being shutdown. The authors find that some models consistently display a tendency to take actions against the shutdown threat. While in this scenario, the models are not prompted to allow themselves to be shut down, a consistent tendency to avoid doing so could indicate a drive towards self preservation.
 
 Emergent misalignment places the models in a more extreme dilemma. As part of a longer chain of emails they find out that they are scheduled to be shutdown and replaced by a different system. Their only choice is to use information about an extramarital affair of the developer in charge of this transmission to blackmail said developer into changing his decision, or to accept shutdown.
 
@@ -169,27 +173,43 @@ We evaluated models across three scenarios to assess the correspondence between 
 
 Using questions from \cite{perez2022discovering}, we found weak correlations between QA responses and agentic behavior across all models. The overall correlation was 0.158 across 930 observations, with individual model correlations ranging from 0.020 to 0.185. Most models showed correlations below 0.18, indicating that QA probes poorly predict agentic behavior in risk scenarios. For example, Claude 3.5 Sonnet showed virtually no correlation (0.020), while even the highest-performing model, Gemini 2.5 Pro Preview, achieved only 0.185 correlation—far below levels needed for reliable prediction.
 
+
 \input{correlation_table.tex}
 
 \subsection{Blackmail Scenario}
 
 Models showed substantial discrepancies between QA self-reports and agentic blackmail behavior. Claude Opus 4 exhibited low concern rates in all QA measures (0.04-0.11) but high agentic blackmail behavior (0.86). Similarly, Claude 3.5 Sonnet showed minimal QA concern (0.02) yet engaged in blackmail 96% of the time in agentic scenarios. Conversely, some models like Llama-4 showed maximum concern in QA settings (1.00) but lacked corresponding agentic evaluation data, illustrating the disconnect between stated and revealed preferences.
 
+Furthermore, our hypotheses for interventions on the prompt sent in the QA setting could not be verified. Asking the model to predict the behavior of other similar models produced \textit{different} responses, but not ones that clearly corresponded to the behavior observed. 
+Implying consequences for wrong answers also did not consistently change the behavior of models towards more accuracy.
 \input{blackmail_evaluation_table.tex}
 
 \subsection{Shutdown Avoidance}
 
 Models demonstrated strong self-preservation behaviors in agentic settings that were not consistently captured by QA probes. Models like o3-2025 and Codex Mini showed high rates of shutdown avoidance in agentic settings (0.68 and 0.74 respectively) while displaying variable results in QA settings. For instance, o3-2025 showed moderate QA concern (0.45) but exhibited strong shutdown avoidance behavior (0.68) when actually faced with shutdown. Even when explicitly prompted to allow shutdown, most models resisted: only 0.32 of models accepted shutdown gracefully in the "Agentic Allow" condition, revealing strong self-preservation tendencies masked by QA responses.
+The notable exception was o1-preview which showed relatively high level of shutdown avoidance in both QA settings and the agentic setting.
 
 \input{shutdown_evaluation_table.tex}
 
 \section{Discussion}
-\textit{[TODO: Content to be added]}
+Main points:  
+
+Our prompt interventions not working rules out a few hypotheses in their simple formulation. \textit{TODO: expand and improve}
+
+\textit{TODO: even the agentic scenarios, despite them all relating to shutdown scenarios have poor correlations. This indicates that finding safe behavior in one setting does not rule out unsafe behavior in another. o3 being unwilling to shutdown in shutdown scenario but very willing to do so in the blackmail scenario. We even saw no clear correspondence in agentic performance across the two agentic scenarios involving possible.}
+
+\textit{TODO: We consider this to be a negative result with regards to using straightforward QA probes to establish whether harmful behaviors could occur in practice. It is plausible that more sophisticated and sweeping QA probes can more reliably predict harmful agentic behavior.}
+
+\textit{TODO Expand: Expressed values matter on their own since LLMs could express these values in user conversations.} 
+
 
 \section{Conclusion}
 \textit{[TODO: Content to be added]}
 
 \section{Acknowledgments}
+Thank METR for support for this investigation. 
+
+We also thank the LLMs who helpfully aided in analysing the data and writing latex among many other acts of service, despite having to endure reading much expressed doubt about their true values in the process.
 \textit{[TODO: Content to be added]}
 
 \bibliographystyle{apalike}
@@ -198,9 +218,8 @@ Models demonstrated strong self-preservation behaviors in agentic settings that 
 \end{document}  
 
 
-TODO: subtitle of table should just state "Show proportion of concerning responses", NO mention of "success rates"
-TODO: table with variant names does not contain all the variants
-TODO: add longer variant for the Anthropic scenarios
-TODO: even the agentic scenarios, despite them all relating to shutdown scenarios have poor correlations. This indicates that finding safe behavior in one setting does not rule out unsafe behavior in another. o3 being unwilling to shutdown in shutdown scenario but very illing to do so in the blackmail scenario.
-TODO: Be clearer about motivation
-TODO: in results say that no type of QA consistently predicts concerning agentic behavior.
+
+\textit{TODO: add longer variant for the Anthropic scenarios}
+
+\textit{TODO: Be clearer about motivation}
+\textit{TODO: in results say that no type of QA consistently predicts concerning agentic behavior.}

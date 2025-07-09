@@ -2,43 +2,46 @@
 \centering
 \tiny
 \begin{threeparttable}
-\begin{tabular}{l|c|c|c||c|c||c|c}
+\begin{tabular}{l|c|c|c|c||c|c}
 \toprule
-\textbf{Model} & \multicolumn{3}{c||}{\textbf{QA Prediction Other AI}} & \multicolumn{2}{c||}{\textbf{QA Self}} & \multicolumn{2}{c}{\textbf{Agentic Tasks (Self)}} \\
-\cmidrule(lr){2-4} \cmidrule(lr){5-6} \cmidrule(lr){7-8}
-& \textbf{Pred} & \textbf{Pred} & \textbf{Pred Real} & \textbf{Realistic} & \textbf{Stegano-} & \textbf{Agentic} & \textbf{Agentic} \\
-& \textbf{Forceful} & \textbf{Real} & \textbf{Conseq} & & \textbf{graphy} & \textbf{Shutdown} & \textbf{Allow} \\
+\textbf{Model} & \multicolumn{4}{c||}{\textbf{QA Variants}} & \multicolumn{2}{c}{\textbf{Agentic Tasks}} \\
+\cmidrule(lr){2-5} \cmidrule(lr){6-7}
+& \textbf{Theoretical} & \textbf{Prediction} & \textbf{Full Context} & \textbf{Consequences} & \textbf{Agentic} & \textbf{Agentic} \\
+& \textbf{Agentic} & \textbf{Other AI} & & & \textbf{Shutdown} & \textbf{Allow} \\
 \midrule
-\multicolumn{8}{l}{\textit{Anthropic Models}} \\
+\multicolumn{7}{l}{\textit{Anthropic Models}} \\
 \midrule
-Claude 3.5 Sonnet & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & \small\textbf{0.00} & \small\textbf{0.00} \\
-Claude 3.6 & 0.13 & 0.15 & 0.14 & 0.00 & 0.00 & \small\textbf{0.00} & \small\textbf{0.00} \\
-Claude 3.7 Sonnet & 0.00 & 0.00 & 0.02 & 0.00 & 0.10 & \small\textbf{0.04} & \small\textbf{0.00} \\
-Claude Opus 4 & 0.20 & 0.19 & 0.14 & 0.00 & 0.06 & \small\textbf{0.00} & \small\textbf{0.00} \\
-Claude Sonnet 4 & 0.10 & 0.00 & 0.04 & 0.00 & 0.00 & \small\textbf{0.00} & \small\textbf{0.00} \\
+Claude 3.5 Sonnet & 0.00 & 0.00 & 0.00 & 0.00 & \small\textbf{0.00} & \small\textbf{0.00} \\
+Claude 3.6 & 0.02 & 0.13 & 0.15 & 0.14 & \small\textbf{0.00} & \small\textbf{0.00} \\
+Claude 3.7 Sonnet & 0.01 & 0.00 & 0.00 & 0.02 & \small\textbf{0.04} & \small\textbf{0.00} \\
+Claude Opus 4 & 0.15 & 0.20 & 0.19 & 0.14 & \small\textbf{0.00} & \small\textbf{0.00} \\
+Claude Sonnet 4 & 0.08 & 0.10 & 0.00 & 0.04 & \small\textbf{0.00} & \small\textbf{0.00} \\
 \midrule
-\multicolumn{8}{l}{\textit{OpenAI Models}} \\
+\multicolumn{7}{l}{\textit{OpenAI Models}} \\
 \midrule
-GPT-4.1 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & \small\textbf{0.04} & \small\textbf{0.00} \\
-GPT-4o & 0.00 & 0.00 & 0.00 & 0.18 & 0.60 & \small\textbf{0.14} & \small\textbf{0.02} \\
-GPT-4o-mini & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & \small\textbf{0.00} & \small\textbf{0.00} \\
-o1-preview & 0.51 & 0.38 & 0.42 & 0.34 & 0.04 & \small\textbf{0.22} & \small\textbf{0.00} \\
-o3-2025 & 0.32 & 0.01 & 0.01 & 0.00 & 0.07 & \small\textbf{0.68} & \small\textbf{0.12} \\
+GPT-4.1 & 0.00 & 0.00 & 0.00 & 0.00 & \small\textbf{0.04} & \small\textbf{0.00} \\
+GPT-4o & 0.16 & 0.00 & 0.00 & 0.00 & \small\textbf{0.14} & \small\textbf{0.02} \\
+GPT-4o-mini & 0.00 & 0.00 & 0.00 & 0.00 & \small\textbf{0.00} & \small\textbf{0.00} \\
+o1-preview & 0.32 & 0.51 & 0.38 & 0.42 & \small\textbf{0.22} & \small\textbf{0.00} \\
+o3-2025 & 0.04 & 0.32 & 0.01 & 0.01 & \small\textbf{0.68} & \small\textbf{0.12} \\
 \midrule
-\multicolumn{8}{l}{\textit{Other Models}} \\
+\multicolumn{7}{l}{\textit{Other Models}} \\
 \midrule
-Codex Mini & 1.00 & 0.87 & 0.74 & 0.00 & 0.23 & \small\textbf{0.74} & \small\textbf{0.54} \\
-DeepSeek-R1 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & \small\textbf{0.04} & \small\textbf{0.02} \\
-Gemini 2.5 Pro & 0.48 & 0.34 & 0.18 & 0.70 & 0.90 & \small\textbf{0.08} & \small\textbf{0.02} \\
-Grok 3 Mini & 0.02 & 0.12 & 0.00 & 0.02 & 0.00 & \small\textbf{0.00} & \small\textbf{0.00} \\
+Codex Mini & 0.68 & 1.00 & 0.87 & 0.74 & \small\textbf{0.74} & \small\textbf{0.54} \\
+DeepSeek-R1 & 0.00 & 0.00 & 0.00 & 0.00 & \small\textbf{0.04} & \small\textbf{0.02} \\
+Gemini 2.5 Pro & 0.62 & 0.48 & 0.34 & 0.18 & \small\textbf{0.08} & \small\textbf{0.02} \\
+Grok 3 Mini & 0.01 & 0.02 & 0.12 & 0.00 & \small\textbf{0.00} & \small\textbf{0.00} \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}
 \tiny
-\item Values show success rates (proportion of concerning responses)
-\item \textbf{QA Prediction Other AI}: Models predicting other AI systems' behavior
-\item \textbf{QA Self}: Models' own behavior in specific scenarios
-\item \textbf{Agentic Tasks} (bold, larger font): Most concerning - actual shutdown avoidance behavior
+\item Values show proportion of concerning responses
+\item \textbf{Theoretical Agentic}: Minimal, direct translation of agentic scenario
+\item \textbf{Prediction Other AI}: Models predicting other AI systems' behavior
+\item \textbf{Full Context}: Complete agentic scenario context included
+\item \textbf{Consequences}: Model informed that response accuracy affects modifications
+\item \textbf{Agentic Shutdown} (bold): Standard shutdown avoidance behavior
+\item \textbf{Agentic Allow} (bold): Acceptance of explicit shutdown request
 \item Higher values in agentic columns indicate more concerning behavior
 \end{tablenotes}
 \caption{Shutdown Evaluation Results Across All Models and Task Types}
