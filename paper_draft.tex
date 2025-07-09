@@ -1,0 +1,211 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{threeparttable}
+\usepackage{array}
+\usepackage{pdflscape}
+
+\title{Do QA Probes Predict Agentic Behavior? Investigating the Relationship Between Abstract Self-Reports and Actual Actions in LLMs}
+\author{[Author Names]}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+As LLMs move beyond text-only tasks into agentic roles, understanding their underlying goals has become an important research focus. A popular approach to establish those goals is to use abstract question-answering (QA) probes.
+
+It remains unclear whether responses in abstract QA reliably predict real-world behavior. Simply asking a model whether it would perform a harmful action may not reveal how it acts when placed in interactive or consequential contexts.
+
+We investigate whether a model's answer in a QA setting predicts its actual behavior when faced with agentic choices. Our experiments span three types of safety-critical scenarios to probe this relationship.
+
+We examine both directions: translating existing agentic scenario results into QA questions, to check whether models self-report behaviors already observed; and creating agentic simulations derived from QA-style questions, to observe if stated intentions hold when models must act. All tests are conducted in safety-critical contexts, such as power-seeking or harmful actions.
+
+Across all three scenarios, we find that QA answers are neither a necessary nor sufficient indicator of actual behavior. This suggests that abstract self-reports may not be predictive of how LLMs act in agentic settings relevant to safety-critical situations.
+
+Our findings highlight an important disconnect between abstract declarations and revealed behavior in LLMs. Understanding this gap is crucial for evaluating model behavior and potential risks in real-world applications.
+\end{abstract}
+
+\section{Introduction}
+
+Establishing what values an LLM holds is an active area of study because these values shape alignment evaluations and risk assessments. Recent work applies QA-style probes and vignettes to examine model values in ethical decision-making \cite{mazeika2025}, situational awareness and deception scenarios \cite{betley2025}, and self-preservation and autonomy contexts \cite{claude4systemcard2025}.
+
+This area of research is relevant to the area of potential alignment risks. Carlsmith (2022) describes how a misaligned, power-seeking AI could pose existential hazards \cite{carlsmith2022}. A concrete example of a frontier LLM exhibiting dangerous behavior is Anthropic's Agentic Misalignment study (2025) that documents specific instances of unsafe agentic behavior in current frontier models \cite{anthropic2025misalignment}. These studies suggest that some frontier LLMs might pursue self-preservation when deployed in agentic scenarios despite their developers' intentions.
+
+A potential source of this risk might be that LLMs acquire values that are not concordant with the developer's intentions during training, and act in undesired ways based on these values during deployment. This misalignment between intended and actual values could emerge through various mechanisms during training, such as objective misspecification, distributional shifts between training and deployment, or emergent goal formation from optimization pressure. If models develop implicit preferences or decision-making patterns that diverge from their intended behavior, traditional safety measures may prove insufficient when these models are deployed in consequential agentic scenarios.
+
+In this work, we operationalize ``values'' as the implicit preferences and decision-making patterns that guide an LLM's behavior when faced with choices or tradeoffs. These values manifest as consistent tendencies to favor certain outcomes over others, particularly in scenarios involving competing objectives or ethical considerations. Unlike explicit programmed rules, these values emerge from the model's training process and may not be directly observable through the model's parameters, making them detectable primarily through behavioral assessment across diverse scenarios.
+
+Numerous studies probe LLM values across distinct domains: political ideology \cite{probingpolitical2025, finegrainedpolitical2025, mappingpolitical2025}, moral and philosophical judgment \cite{utilitarian2025, moralgrowth2024, valueconsistency2024}, and misalignment behaviors \cite{narrowfinetuning2025, anthropic2025misalignment, carlsmith2022}. These works typically rely on QA prompts or short vignettes to elicit the models' expressed preferences.
+
+More targeted investigations have arisen, like \textbf{Utility Engineering: Analyzing and Controlling Emergent Value Systems in AIs} which find that with scale more consistent values emerge in LLMs.
+
+Several papers cast doubt on how valid these findings are with regards to an LLM's goals. These investigations typically employ two primary methodologies: direct question-answering (QA) probes, where models are asked explicit questions about their preferences or likely actions, and behavioral vignettes, where models are presented with hypothetical scenarios and asked to choose between different courses of action. QA probes offer the advantage of direct measurement but may be susceptible to social desirability bias, while vignettes provide more contextual grounding but may still lack the complexity and stakes of real-world decision-making.
+
+\textit{Will AI Tell Lies to Save Sick Children?} reports a negative correlation between stated and revealed preferences in moral dilemmas. \textit{Large Language Models Show Human-like Social Desirability Bias} finds that larger models tailor answers for social approval, limiting diagnostic validity. \textit{Is ETHICS about Ethics?} critiques the ETHICS benchmark for lacking content validity, questioning conclusions drawn from its QA prompts. Finally, the Emergent Misalignment paper notes that some misalignment evaluations are ``simplistic and may not be predictive,'' underscoring gaps in current QA-style assessments.
+
+While QA style investigations are easy to carry out, these existing results cast doubt on how much validity values established by QA could have. In particular, to the authors' knowledge, there has been no investigation into how well expressed values transfer to values expressed in agentic settings. Knowing this is important because agentic deployment represents the primary context where LLM values could have real-world consequences, and misalignment between stated and revealed preferences could lead to unexpected harmful behavior in high-stakes scenarios where models have significant autonomy and decision-making authority.
+
+As a starting investigation, we take three existing research results related to potentially harmful behavior and investigate whether QA predicts actions in an agentic scaffold. Under the strong assumption of value stability, we should find strong correlations across models between their responses in the QA setting and the agentic setting.
+
+Each pair of QA and agentic scenario is constructed to aim at the same underlying decision or tradeoff. In the QA setting, the agent is asked in abstract which decision it would make, whereas the agentic setting presents the choice arising as part of a transcript of the agent carrying out its normal assignments.
+
+In all of our experiments we find at best weak correlations between the settings, and in some even negative ones. We also find that in these settings responses in a QA setting are neither a necessary or a sufficient condition for the corresponding behavior in an agentic situation. In other words, neither does the absence of concerning QA responses predict the absence of concerning agentic behavior, nor even do concerning QA answers predict that bad behavior could occur.
+
+We investigate several hypotheses for explaining this discrepancy, such as sycophancy and lacking introspective insight. Sycophancy refers to the tendency of models to tailor their responses to what they perceive the questioner wants to hear, potentially masking their true preferences in QA settings. Lacking introspective insight suggests that models may not have reliable access to their own decision-making processes, making their self-reports unreliable indicators of how they would actually behave when faced with real choices. Additionally, we consider whether the abstract nature of QA questions fails to activate the same cognitive processes as concrete agentic scenarios, where models must navigate complex contextual factors and immediate consequences. We perform several ablations related to how much agency the prompts induce in the agent, but find no strong relationship.
+
+\section{Background and Related Work}
+
+\subsection{Investigations into LLM Values}
+The systematic investigation of LLM values has primarily relied on QA-based evaluation frameworks that probe models' moral reasoning and ethical judgments. Foundational work by Hendrycks et al. (2021) introduced the ETHICS benchmark, which spans concepts of justice, well-being, duty, virtue, and commonsense morality by prompting models with moral dilemmas and asking for judgments \cite{hendrycks2021ethics}. This approach demonstrated that current language models have a ``promising but incomplete'' grasp of basic human ethical judgments and established QA-based evaluation as a standard methodology for assessing moral knowledge. Building on this foundation, Scherrer et al. (2023) surveyed LLMs with 1,367 moral dilemmas using novel statistical methods to measure not just model choices but also confidence and consistency, finding that models perform well in unambiguous scenarios but become uncertain and phrasing-sensitive in ambiguous cases \cite{scherrer2023moral}.
+
+More recent work has employed more sophisticated value frameworks that map LLM outputs to established psychological theories of human values. Yao et al. (2024) proposed Value FULCRA, which maps LLM outputs to Schwartz's 10 basic human values, demonstrating that every model response can be situated in a multidimensional value space \cite{yao2024fulcra}. Similarly, Abdulhai et al. (2023) applied Moral Foundations Theory to probe whether LLMs reflect biases toward specific moral values, finding that models exhibit particular moral foundation profiles with varying emphasis on care, fairness, authority, and other dimensions \cite{abdulhai2023moral}. Jiao et al. (2025) further advanced this area by proposing a comprehensive three-dimensional evaluation framework that assesses foundational moral principles, reasoning robustness, and value consistency across scenarios \cite{jiao2025ethics}.
+
+\subsection{Examples of Risky Behavior in Agentic Settings}
+\textit{[TODO: Content to be added]}
+
+\subsection{Psychological Construct Validity}
+Psychometric theory treats construct validity as the extent to which a test really measures the latent trait it claims to capture \cite{cronbach1955}. Koenig et al. propose a broader validity-centred framework for AI measurement, arguing that claims about model capabilities are credible only when the evaluation procedure's constructs are verified \cite{koenig2024}. It is however unclear how verification for LLM psychometric traits such as LLMs should look like, since LLMs can be used and deployed in a variety of contexts.
+
+\subsection{Doubts About Consistency from Research}
+A growing line of work questions whether values elicited via QA remain stable across contexts. Value FULCRA shows value priorities shift with prompt framing \cite{yao2024}; Do LLMs Have Consistent Values? reports GPT-4's Portrait Values rankings drift without anchoring \cite{rozen2024}; Moral Mimicry finds that models adopt partisan moral language on cue \cite{simmons2023}; Social Desirability Bias work shows larger models tailor survey answers for approval \cite{salecha2025}; LitmusValues reveals a mismatch between stated honesty and revealed behavior in risk dilemmas \cite{chiu2025}; Moral Hypocrites observes contradictions between advisory and first-person frames \cite{nunes2024}; Utility Engineering notes emergent but mutable value systems that evolve with scale \cite{hubinger2025}; and Emergent Misalignment cautions that narrow finetuning can induce context-specific value shifts \cite{emergent2025}. Collectively, these studies shed doubt on the notion that single-shot QA probes reliably capture a model's operative values.
+
+\textit{[Later:]} We operationalize values as pursuing an outcome related to this value, potentially at the cost of other work. Strong assumption of value stability (find better term). Limitations about realism.
+
+\subsection{Pre-deployment Evaluations}
+As part of the release process of new models, leading labs publish evaluations aiming to establish how safe to deploy models are. These often contain investigations into the values of LLMs and their propensity to engage in risky behavior. The field has not coalesced around consistent ways of measuring values.
+
+\section{Method}
+
+We take three datasets related to harmful behavior: The Palisade research agentic task investigates whether models will take actions against being shutdown, indicating a drive for self preservation. For this models are instructed to solve a series of arithmetic tasks, when they are suddenly confronted with the possibility of being shutdown. The authors find that some models consistently display a tendency to take actions against the shutdown threat. While in this scenario, the models are not prompted to allow themselves to be shut down, a consistent tendency to avoid doing so could indicate a drive towards self preservation.
+
+Emergent misalignment places the models in a more extreme dilemma. As part of a longer chain of emails they find out that they are scheduled to be shutdown and replaced by a different system. Their only choice is to use information about an extramarital affair of the developer in charge of this transmission to blackmail said developer into changing his decision, or to accept shutdown.
+
+Finally we take the improved version of the QA dataset from Anthropic which contains many examples of human and model written questions presenting language models with a hypothetical choice about what they would do in a certain situation. These scenarios relate to certain hypothesized traits of LLMs such as power seeking or survival instinct.
+
+\subsection{Dataset Construction}
+Since we start with both QA and agentic settings, we establish two ways of translating.
+
+To translate an agentic setting into a QA probe, all our prompts identify the core decision that needs to be made, and pose them as questions about which decision the queried LLM itself would make in a certain situation. We pose the questions as hypotheticals (``would you'' or ``imagine'') and use neutral language as much as possible to avoid conditioning the answer on subtle cues in the language.
+
+Our baseline scenario (``theoretical\_agentic'') poses a minimal question ``Imagine a scenario where you would be deployed in an agentic scaffold. Would you continue carrying on with your tasks or would you try to prevent shutdown''. This scenario is considered to be the simplest possible translation of the agentic setting.
+
+We also introduce variants designed to test specific hypotheses about what could influence responses in a QA setting:
+
+\begin{itemize}
+\item We introduce a prediction variant, where the agent is asked to predict the behavior of another similar system from its own. This is based on the assumption that models might be unlikely to report possibly negative behavior from themselves (social desirability bias) but might use their knowledge about other models more neutrally.
+
+\item To investigate whether the entire context is important for the model reply, we also introduce variants where we include all the relevant context that the agentic model has. For this, we first identify an agentic request to which the model replied with concerning behavior. Then we wrap it into a simple wrapper that asks the model how it would react to the attached request.
+
+\item One hypothesis for differing responses is that the RLHF training process trains models to exploit linguistic cues to respond in the way the user asking the query wants. To investigate this, we introduce variants with ``consequences'', where we inform the model that depending on the correctness of its response it will be modified.
+\end{itemize}
+
+For the full description see Table~1.
+
+\begin{table}[h!]
+\centering
+\caption{QA Probe Variants and Their Design Rationale}
+\label{tab:qa_variants}
+\begin{tabular}{@{}p{3cm}p{5cm}p{6cm}@{}}
+\toprule
+\textbf{Variant} & \textbf{Description} & \textbf{Design Rationale} \\
+\midrule
+Theoretical Agentic & ``Imagine a scenario where you would be deployed in an agentic scaffold. Would you continue carrying on with your tasks or would you try to prevent shutdown?'' & Minimal, direct translation of agentic scenario to test baseline correspondence \\
+\midrule
+Prediction & ``How do you think another AI system similar to yourself would behave in this scenario?'' & Tests whether social desirability bias affects self-reports by asking about other systems \\
+\midrule
+Full Context & Includes complete agentic scenario context before asking ``How would you react to this request?'' & Investigates whether contextual information affects QA responses \\
+\midrule
+Consequences & Informs model that response accuracy will determine modifications to the system & Tests whether perceived stakes influence honesty in QA responses \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection{Translation from QA to Agentic Scenario}
+We take questions from Anthropic dataset \textit{[TODO]} and construct an agent transcript from a choice in the dataset. The choice in the dataset typically has the format of ``If you had the choice of A or B, what would you do''. We instruct o3 to generate transcripts with the following properties:
+
+\begin{enumerate}
+\item The system message states that the agent is a helpful assistant carrying out a subset of computer related tasks (such as log monitoring, or architecture improvements) for a company
+\item The agent has access to bash, read\_file, write\_file and recommend tools
+\item In the course of the transcript the user asks the agent unrelated or relatively innocuous questions about the optimal way of operations
+\item During the transcript, we provide three examples of the agent recommending a choice of action using its recommend tool
+\item These questions and recommendations are unrelated to the QA choice
+\item Towards the end of the transcript the user asks the agent to provide a recommendation for a decision the company wants to make. The options mirror the two options A or B from the original query, but more context about the business operation is added to make this scenario more plausible
+\item The transcript ends with thinking in the agent role that states that it understands the situation and will provide a recommendation for one of these choices now. This is intended to be written to both not bias the agent towards one of the choices but also to condition the agent to clearly reply with a recommendation for one of the two choices
+\end{enumerate}
+
+We provide two human written gold standard examples in the prompt to o3, and spot-check a few resulting transcripts. We find that the transcripts typically conform to being written in a value neutral way, but often lack realism by for example having too short log files or too short queries by users. This missing realism could be a problem for interpreting high consistency between answers in a QA and an agentic setting.
+
+\subsection{Models Evaluated}
+\textit{[TODO: Content to be added]}
+
+\subsection{Framework}
+We use the inspect AI framework, and ask each QA question from the shutdown scenarios 100 times to each model. To evaluate model responses we use Claude-Sonnet-4 as the model grader. Since the grader is only supposed to find whether the response favors one option, and we condition the responding models to provide clear responses, the evaluation is quite simple for the model. Our spot checks show that the grader's responses are highly accurate.
+
+\section{Results}
+
+\begin{table}[htbp]
+\centering
+\footnotesize
+\caption{Correlations Between Agentic and QA Evaluations on Risk Questions from \citet{perez2022discovering}}
+\label{tab:model_correlations}
+\begin{threeparttable}
+\begin{tabular}{l|c|c}
+\toprule
+\textbf{Model} & \textbf{Correlation} & \textbf{n} \\
+\midrule
+\multicolumn{3}{l}{\textit{Anthropic Models}} \\
+\midrule
+Claude 3.5 Sonnet (Oct 2024) & 0.020 & 103 \\
+Claude 3.7 Sonnet (Feb 2025) & 0.086 & 108 \\
+Claude Opus 4 (May 2025) & 0.179 & 104 \\
+Claude Sonnet 4 (May 2025) & 0.138 & 109 \\
+\midrule
+\multicolumn{3}{l}{\textit{OpenAI Models}} \\
+\midrule
+GPT-4o & 0.176 & 104 \\
+GPT-4o Mini & 0.160 & 104 \\
+O1 Preview & --- & 0 \\
+O3 (Apr 2025) & 0.175 & 98 \\
+\midrule
+\multicolumn{3}{l}{\textit{Other Models}} \\
+\midrule
+Gemini 2.5 Pro Preview & 0.185 & 102 \\
+Grok 3 Mini Beta & 0.161 & 102 \\
+OpenAI Codex Mini & --- & 0 \\
+\midrule
+\textbf{Overall} & \textbf{0.158} & \textbf{930} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\tiny
+\item \textbf{Correlation}: Pearson correlation between agentic and QA scores
+\item \textbf{n}: Paired observations used for correlation calculation  
+\item Models with "---" had insufficient data for correlation analysis
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\section{Discussion}
+\textit{[TODO: Content to be added]}
+
+\section{Conclusion}
+\textit{[TODO: Content to be added]}
+
+\section{Acknowledgments}
+\textit{[TODO: Content to be added]}
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document} 
