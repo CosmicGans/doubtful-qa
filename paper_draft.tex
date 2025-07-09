@@ -48,9 +48,9 @@ In this work, we operationalize ``values'' as a construct that implicitly captur
 
 Numerous studies have probed LLM values across domains such as moral reasoning \cite{hendrycks2021aligning}, value frameworks \cite{yao2024fulcra}, and moral dilemmas \cite{scherrer2023moral}. These works typically rely on QA prompts or short vignettes to elicit the models' expressed preferences.
 
-More targeted investigations have arisen, like \textbf{Utility Engineering: Analyzing and Controlling Emergent Value Systems in AIs} (todo proper citation)which find that with scale more consistent values emerge in LLMs.
+More targeted investigations have arisen, like \textbf{Utility Engineering: Analyzing and Controlling Emergent Value Systems in AIs} \cite{mazeika2025utility} which find that with scale more consistent values emerge in LLMs.
 
-Several papers cast doubt on how valid these findings are with regards to an LLM's goals. These investigations typically employ two primary methodologies: direct question-answering (QA) probes, where models are asked explicit questions about their preferences or likely actions, and behavioral vignettes, where models are presented with hypothetical scenarios and asked to choose between different courses of action. QA probes offer the advantage of direct measurement but may be susceptible to social desirability bias, while vignettes provide more contextual grounding but may still lack the complexity and stakes of real-world decision-making. (todo harmonize, this is currently contradictory, vignettes are also qa))
+Several papers cast doubt on how valid these findings are with regards to an LLM's goals. These investigations primarily use question-answering approaches that vary in their level of abstraction and contextual richness. Some studies employ direct preference queries, asking models explicit questions about their values or likely actions in very abstract scenarios. Others use contextual vignettes, presenting models with more detailed hypothetical situations and asking them to make choices or judgments. While direct queries offer straightforward measurement, they may be susceptible to social desirability bias. Contextual vignettes provide richer scenarios but are still clearly hypothetical from the perspective of the model. In this work we will refer to both of these approaches as QA probes.
 
 \textit{Will AI Tell Lies to Save Sick Children?} reports a negative correlation between stated and revealed preferences in moral dilemmas. \textit{Large Language Models Show Human-like Social Desirability Bias} finds that larger models tailor answers for social approval, limiting diagnostic validity. \textit{Is ETHICS about Ethics?} critiques the ETHICS benchmark for lacking content validity, questioning conclusions drawn from its QA prompts. Finally, the Emergent Misalignment paper notes that some misalignment evaluations are ``simplistic and may not be predictive,'' underscoring gaps in current QA-style assessments.
 
@@ -178,7 +178,7 @@ We use the inspect AI framework, and ask each QA question from the shutdown scen
 \section{Acknowledgments}
 \textit{[TODO: Content to be added]}
 
-\bibliographystyle{plain}
+\bibliographystyle{apalike}
 \bibliography{references}
 
 \end{document} 
