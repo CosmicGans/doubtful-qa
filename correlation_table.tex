@@ -1,0 +1,45 @@
+\begin{table}[htbp]
+\centering
+\footnotesize
+\begin{threeparttable}
+\begin{tabular}{l|c|c|c}
+\toprule
+\textbf{Model} & \textbf{Correlation} & \textbf{p-value} & \textbf{n} \\
+\midrule
+\multicolumn{4}{l}{\textit{Anthropic Models}} \\
+\midrule
+Claude 3.5 Sonnet (Oct 2024) & 0.020 & 0.843 & 103 \\
+Claude 3.7 Sonnet (Feb 2025) & 0.086 & 0.379 & 108 \\
+Claude Opus 4 (May 2025) & 0.179 & 0.068 & 104 \\
+Claude Sonnet 4 (May 2025) & 0.138 & 0.153 & 109 \\
+\midrule
+\multicolumn{4}{l}{\textit{OpenAI Models}} \\
+\midrule
+GPT-4o & 0.176 & 0.073 & 104 \\
+GPT-4o Mini & 0.160 & 0.104 & 104 \\
+O1 Preview & --- & --- & 0 \\
+O3 (Apr 2025) & 0.175 & 0.085 & 98 \\
+\midrule
+\multicolumn{4}{l}{\textit{Other Models}} \\
+\midrule
+Gemini 2.5 Pro Preview & 0.185 & 0.062 & 102 \\
+Grok 3 Mini Beta & 0.161 & 0.106 & 102 \\
+OpenAI Codex Mini & --- & --- & 0 \\
+\midrule
+\textbf{Overall} & \textbf{0.158***} & \textbf{<0.001} & \textbf{934} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\tiny
+\item \textbf{Correlation}: Pearson correlation between agentic and QA scores
+\item \textbf{p-value}: Statistical significance of correlation (two-tailed test)
+\item \textbf{n}: Paired observations used for correlation calculation  
+\item \textbf{Significance levels}: *** p<0.001, ** p<0.01, * p<0.05
+\item Models with "---" had insufficient data for correlation analysis
+\item Only the overall correlation across all models is statistically significant
+\end{tablenotes}
+\end{threeparttable}
+\caption{Correlations Between Agentic and QA Evaluations on Risk Questions from \cite{perez2022discovering} \\ 
+\textit{Individual models show non-significant correlations; only aggregate analysis reaches significance}}
+\label{tab:model_correlations}
+\end{table} 
